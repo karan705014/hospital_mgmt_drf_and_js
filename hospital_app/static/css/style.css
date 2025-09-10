@@ -1,0 +1,306 @@
+/* Main container */
+.main-content {
+    margin-top: 20px;              
+    padding: 20px 10px;            
+    background: linear-gradient(160deg, #e0f7fa 0%, #ffffff 100%);
+    min-height: 100vh;          
+    font-family: 'Poppins', sans-serif;
+    color: #2c3e50;
+}
+
+.main-content section {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-content section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.main-content h1, .main-content h2 {
+    font-weight: 700;
+    color: #00796b; 
+    margin-bottom: 15px;
+}
+
+.main-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.main-content .btn-primary {
+    background-color: #00796b;
+    border-color: #00796b;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.main-content .btn-primary:hover {
+    background-color: #004d40;
+    transform: scale(1.05);
+}
+
+.main-content .card {
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-content .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 20px 15px;
+    }
+    .main-content section {
+        padding: 20px;
+    }
+}
+
+
+/* Cards styling for hospital theme */
+.hospital-card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hospital-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(8, 201, 82, 0.15);
+}
+
+.card-img-small {
+    height: 180px;        
+    object-fit: cover;     
+    width: 100%;
+}
+
+.hospital-card .card-title {
+    color: #00796b;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.hospital-card .card-text {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+
+
+/* navbar styles */
+
+.navbar {
+    background-color: #00796b !important;  
+    min-height: 100px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+}
+
+.navbar-brand {
+    color: #e0f7fa !important;          
+    font-weight: 900;                  
+    font-size: 2rem;                     
+    font-family: 'Poppins', sans-serif; 
+    position: relative;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 3px;
+    background: #b2dfdb;                
+    transition: width 0.4s ease;
+    border-radius: 3px;
+    margin-top: 5px;
+}
+
+.navbar-brand:hover {
+    color: #ffffff !important;           
+    text-shadow: 0 0 8px rgba(255,255,255,0.5); 
+}
+
+.navbar-brand:hover::after {
+    width: 100%;                     
+}
+
+.navbar .nav-link {
+    color: #e0f7fa !important;  
+    font-weight: 500;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #b2dfdb !important;  
+}
+
+.navbar .btn-primary {
+    background-color: #004d40;
+    border-color: #004d40;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.navbar .btn-primary:hover {
+    background-color: #00251a;
+    transform: scale(1.05);
+}
+
+
+
+/* FOTTER KA STYLING */
+
+.footer {
+    background-color: #004d40;     
+    color: #e0f7fa;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer a {
+    color: #b2dfdb;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.footer .footer-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.footer p, .footer li {
+    font-size: 0.95rem;
+}
+
+.footer .footer-divider {
+    border-top: 1px solid #00796b;
+    margin: 1rem 0;
+}
+
+
+
+
+/* Common Floating Hospital Icons */
+
+.icon {
+  position: absolute;
+  font-size: 28px;
+  color: rgba(0, 121, 107, 0.3);
+  animation: float 12s linear infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+
+/* LOGIN PAGE */
+
+body.login-page {
+  background: linear-gradient(135deg, #e0f7fa, #ffffff, #b2ebf2);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.login-box {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  width: 350px;
+  position: relative;
+  z-index: 10;
+}
+
+.btn-login {
+  background-color: #00796b;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 25px;
+}
+
+.btn-login:hover {
+  background-color: #004d40;
+}
+
+/* REGISTER PAGE */
+
+body.register-page {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2, #fff8e1);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.register-box {
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  width: 380px;
+  position: relative;
+  z-index: 10;
+}
+
+.btn-register {
+  background-color: #00796b;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 25px;
+  transition: 0.3s;
+}
+
+.btn-register:hover {
+  background-color: #004d40;
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+
+/* HOME PAGE */
+
+body.home-page {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9, #a5d6a7);
+  min-height: 100vh;
+  padding: 20px;
+}
