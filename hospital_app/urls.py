@@ -7,4 +7,5 @@ urlpatterns = [
     path('api/register/',views.registration_store,name="register_api"),
     path('patient/login/',views.patient_login,name="patient_login"),
     path('patient/verify',views.patient_verify,name="patient_verify"),
+    path('book/appointment/', views.book_appointment, name="book_appointment"),
 ]

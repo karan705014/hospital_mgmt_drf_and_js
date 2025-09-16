@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from .serializers import PatientSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Patient
+from .models import Patient,Doctor,Appointment
 
 # Create your views here.
 def home(request):
@@ -22,8 +22,10 @@ def registration_store(request):
     return redirect('register_api')
 
 
+
 def patient_login(request):
     return render(request,"patient_login.html")
+
 
 # ye without rest hai for easy
 def patient_verify(request):
@@ -33,7 +35,70 @@ def patient_verify(request):
         password=request.POST.get("password")
         try:
             patient=Patient.objects.get(phone=phone,password=password)
-            return redirect("patient_dashboard")
+            request.session['patient_id'] = patient.id
+            return redirect("book_appointment")
         except Patient.DoesNotExist:
             errror="invalid username or password"
     return render(request,"register_form.html",{"errror":errror})
+
+
+
+# def patient_dashboard(request):
+#     doctors = Doctor.objects.all()
+#     print("Doctors in DB:", doctors)
+#     return render(request, "patient_dashboard.html", {"doctors": doctors})
+
+
+from django.shortcuts import render
+from .models import Doctor
+
+def book_appointment(request):
+    # DB se saare doctors fetch karo
+    doctors = Doctor.objects.all()
+
+    # Agar form submit hua hai
+    if request.method == "POST":
+        doctor_id = request.POST.get("doctor")
+        appointment_time = request.POST.get("time")
+        print("Selected Doctor ID:", doctor_id)
+        print("Selected Time:", appointment_time)
+        # Yahan tum DB me save karne ka code add kar sakte ho
+        message = "Appointment booked successfully!"
+        return render(request, "book_appointment.html", {"doctors": doctors, "message": message})
+
+    return render(request, "book_appointment.html", {"doctors": doctors})
+
+
+
+
+def book_appointment(request):
+    doctors = Doctor.objects.all()
+    
+    # Patient fetch from session
+    patient_id = request.session.get("patient_id")
+    patient = None
+    if patient_id:
+        try:
+            patient = Patient.objects.get(id=patient_id)
+        except Patient.DoesNotExist:
+            patient = None
+    
+    if request.method == "POST":
+        doctor_id = request.POST.get("doctor")
+        appointment_time = request.POST.get("time")
+        doctor = Doctor.objects.get(id=doctor_id)
+
+        if patient:  # only save if patient is logged in
+            Appointment.objects.create(
+                patient=patient,
+                doctor=doctor,
+                time=appointment_time
+            )
+            message = "Appointment booked successfully!"
+        else:
+            message = "Patient not logged in!"
+
+        return render(request, "book_appointment.html", {"doctors": doctors, "message": message})
+
+    return render(request, "book_appointment.html", {"doctors": doctors})
+

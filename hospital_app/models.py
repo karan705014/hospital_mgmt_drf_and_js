@@ -10,3 +10,22 @@ class Patient(models.Model):
 
     def __str__(self):
         return self.name
+
+class Doctor(models.Model):
+    name=models.CharField(max_length=50)
+    specialty=models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+    
+
+
+
+class Appointment(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    time = models.TimeField()
+    booked_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.patient.name} -> {self.doctor.name} at {self.time}"

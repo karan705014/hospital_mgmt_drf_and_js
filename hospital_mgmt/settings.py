@@ -128,3 +128,6 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static", 
 ]
+
+LOGIN_URL = '/patient/login/'        # login view ke liya
+LOGIN_REDIRECT_URL = '/dashboard/'
