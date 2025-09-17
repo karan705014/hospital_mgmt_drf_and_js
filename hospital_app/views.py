@@ -66,7 +66,7 @@ def book_appointment(request):
                 doctor=doctor,
                 time=appointment_time
             )
-            message = "Appointment booked successfully!"
+            return redirect('appointment_success')
         else:
             message = "Patient not logged in!"
 
@@ -74,3 +74,29 @@ def book_appointment(request):
 
     return render(request, "book_appointment.html", {"doctors": doctors})
 
+
+
+def  appointment_success(request):
+    return render(request,"appointment_sucess.html")
+
+def status_verify(request):
+    return render(request,"status_verify.html")
+
+def status_check(request):
+    if request.method=="POST":
+        phone=request.POST.get("phone")
+        password=request.POST.get("password")
+
+        try:
+            patient=Patient.objects.get(phone=phone,password=password)
+            request.session['patient_id']=patient.id
+            return redirect('status_page')
+        except Patient.DoesNotExist:
+            error="ivalid user name or paassword"
+    return redirect('home')
+
+
+
+
+def status_page(request):
+    return render(request,"status_page.html")
