@@ -11,5 +11,10 @@ urlpatterns = [
     path('appointment/success',views.appointment_success,name="appointment_success"),
     path('status/verify',views.status_verify,name="status_verify") ,
     path('status/check',views.status_check,name="status_check"),
-    path('status/page',views.status_page,name="status_page")
+    path('status/page',views.status_page,name="status_page"),
+    path('adminpage/dashboard/', views.admin_dashboard, name="admin_dashboard"),
+    path('adminpage/login',views.admin_login,name="admin_login"),
+    path('adminpage/verify',views.admin_verify,name="admin_verify"),
+    path("adminpage/update_status/<int:appointment_id>/<str:status>/", views.update_status, name="update_status"),
+
 ]

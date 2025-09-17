@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0f7fa, #ffffff, #b2ebf2);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Floating hospital icons */
+    .icon {
+      position: absolute;
+      font-size: 28px;
+      color: rgba(0, 121, 107, 0.3);
+      animation: float 12s linear infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .login-box {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+      width: 350px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .btn-login {
+      background-color: #00796b;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 25px;
+    }
+    .btn-login:hover {
+      background-color: #004d40;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+  <!-- Floating icons (Font Awesome hospital set) -->
+  <i class="fa-solid fa-stethoscope icon" style="left:10%; animation-delay:0s;"></i>
+  <i class="fa-solid fa-syringe icon" style="left:25%; animation-delay:2s;"></i>
+  <i class="fa-solid fa-heart-pulse icon" style="left:40%; animation-delay:4s;"></i>
+  <i class="fa-solid fa-pills icon" style="left:60%; animation-delay:6s;"></i>
+  <i class="fa-solid fa-kit-medical icon" style="left:80%; animation-delay:8s;"></i>
+  <i class="fa-solid fa-user-doctor icon" style="left:90%; animation-delay:10s;"></i>
+
+  <div class="login-box">
+    <h3 class="text-center mb-3"> ADMIN LOGIN</h3>
+   <form method="POST" action="{% url 'admin_verify' %}">
+    {% csrf_token %}
+    <input type="text" name="phone">
+    <input type="password" name="password">
+    <button type="submit">Login</button>
+    </form>
+  </div>
+</body>
+</html>

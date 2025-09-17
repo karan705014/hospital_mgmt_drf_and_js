@@ -1,9 +1,9 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from rest_framework.decorators import api_view 
 from .serializers import PatientSerializer
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Patient,Doctor,Appointment
+from .models import Patient,Doctor,Appointment,Admin
+from django.utils import timezone
+
 
 # Create your views here.
 def home(request):
@@ -58,13 +58,15 @@ def book_appointment(request):
     if request.method == "POST":
         doctor_id = request.POST.get("doctor")
         appointment_time = request.POST.get("time")
+        date=request.POST.get("date")
         doctor = Doctor.objects.get(id=doctor_id)
 
         if patient:  # only save if patient is logged in
             Appointment.objects.create(
                 patient=patient,
                 doctor=doctor,
-                time=appointment_time
+                time=appointment_time,
+                date=date if date else timezone.now().date()
             )
             return redirect('appointment_success')
         else:
@@ -90,13 +92,48 @@ def status_check(request):
         try:
             patient=Patient.objects.get(phone=phone,password=password)
             request.session['patient_id']=patient.id
-            return redirect('status_page')
+            return redirect("status_page")
         except Patient.DoesNotExist:
             error="ivalid user name or paassword"
     return redirect('home')
 
-
-
-
 def status_page(request):
-    return render(request,"status_page.html")
+    if "patient_id" not in request.session:
+        return redirect("patient_login")  
+
+    patient_id = request.session["patient_id"]
+    appointments = Appointment.objects.filter(patient_id=patient_id).order_by("-id")
+
+    return render(request, "status_page.html", {"appointments": appointments})
+
+
+
+def admin_dashboard(request):
+    appointments = Appointment.objects.all().order_by('-id') 
+    return render(request,"admin_dashboard.html",{"appointments":appointments})
+
+
+def admin_login(request):
+    return render(request,"admin_login.html")
+
+
+def admin_verify(request):
+    error=None
+    if request.method=='POST':
+        phone=request.POST.get("phone")
+        password=request.POST.get("password")
+
+        try:
+            admin=Admin.objects.get(phone=phone,password=password)
+            request.session['admin_id']=admin.id
+            return redirect("admin_dashboard")
+        except Admin.DoesNotExist:
+            error="invlid phone and password"
+    return render(request,"admin_login.html",{"error":error})
+
+
+def update_status(request, appointment_id, status):
+    appt = get_object_or_404(Appointment, id=appointment_id)
+    appt.status = status
+    appt.save()
+    return redirect('admin_dashboard')

@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2 class="dashboard-title">Admin Dashboard</h2>
+
+        <table class="dashboard-table">
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in appointments %}
+                <tr>
+                    <td>{{ appt.patient.name }}</td>
+                    <td>{{ appt.doctor.name }}</td>
+                    <td>{{ appt.time }}</td>
+                    <td>{{ appt.date }}</td>
+                    <td>
+                        {% if appt.status == "pending" %}
+                            <span class="status pending">Pending</span>
+                        {% elif appt.status == "approved" %}
+                            <span class="status approved">Approved</span>
+                        {% else %}
+                            <span class="status rejected">Rejected</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'update_status' appt.id 'approved' %}" class="btn approve">Approve</a>
+                        <a href="{% url 'update_status' appt.id 'rejected' %}" class="btn reject">Reject</a>
+                        <a href="{% url 'update_status' appt.id 'pending' %}" class="btn pending">Pending</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="no-data">No appointments</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

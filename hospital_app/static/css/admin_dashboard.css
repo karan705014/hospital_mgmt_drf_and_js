@@ -1,0 +1,106 @@
+/* Container */
+.dashboard-container {
+    width: 90%;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+/* Title */
+.dashboard-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+    color: #00796b;
+}
+
+/* Table Styling */
+.dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.dashboard-table th, 
+.dashboard-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.dashboard-table thead {
+    background: #00796b;
+    color: #fff;
+}
+
+.dashboard-table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.no-data {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+}
+
+/* Status Colors */
+.status {
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
+.status.pending {
+    color: #ff9800;
+    background: #fff3e0;
+}
+
+.status.approved {
+    color: #2e7d32;
+    background: #e8f5e9;
+}
+
+.status.rejected {
+    color: #c62828;
+    background: #ffebee;
+}
+
+/* Buttons */
+.btn {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 4px;
+    transition: 0.3s ease;
+}
+
+.btn.approve {
+    background: #4caf50;
+    color: white;
+}
+
+.btn.approve:hover {
+    background: #388e3c;
+}
+
+.btn.reject {
+    background: #f44336;
+    color: white;
+}
+
+.btn.reject:hover {
+    background: #d32f2f;
+}
+
+.btn.pending {
+    background: #ff9800;
+    color: white;
+}
+
+.btn.pending:hover {
+    background: #ef6c00;
+}
