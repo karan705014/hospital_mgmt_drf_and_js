@@ -2,10 +2,11 @@
 .dashboard-container {
     width: 90%;
     margin: 30px auto;
-    background: #ffffff;
+    background: #004d40; /* Dark teal background */
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    color: #e0f7fa; /* Light text */
 }
 
 /* Title */
@@ -13,7 +14,7 @@
     text-align: center;
     margin-bottom: 20px;
     font-size: 26px;
-    color: #00796b;
+    color: #a7ffeb; /* Light teal title */
 }
 
 /* Table Styling */
@@ -21,27 +22,28 @@
     width: 100%;
     border-collapse: collapse;
     font-size: 16px;
+    color: #e0f7fa; /* Light text for table */
 }
 
 .dashboard-table th, 
 .dashboard-table td {
     padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #00796b; /* Darker teal border */
     text-align: center;
 }
 
 .dashboard-table thead {
-    background: #00796b;
-    color: #fff;
+    background: #00796b; /* Teal header */
+    color: #e0f7fa; /* Light text */
 }
 
 .dashboard-table tbody tr:nth-child(even) {
-    background: #f9f9f9;
+    background: #00695c; /* Slightly darker teal for stripes */
 }
 
 .no-data {
     text-align: center;
-    color: #999;
+    color: #b2dfdb; /* Light teal */
     padding: 20px;
 }
 
@@ -53,18 +55,18 @@
 }
 
 .status.pending {
-    color: #ff9800;
-    background: #fff3e0;
+    color: #fff3e0;
+    background: #ffa726; /* Orange on dark teal */
 }
 
 .status.approved {
-    color: #2e7d32;
-    background: #e8f5e9;
+    color: #e8f5e9;
+    background: #43a047; /* Green */
 }
 
 .status.rejected {
-    color: #c62828;
-    background: #ffebee;
+    color: #ffebee;
+    background: #e53935; /* Red */
 }
 
 /* Buttons */
@@ -76,31 +78,29 @@
     font-weight: bold;
     margin: 0 4px;
     transition: 0.3s ease;
+    color: #e0f7fa; /* Light text */
 }
 
 .btn.approve {
-    background: #4caf50;
-    color: white;
-}
-
-.btn.approve:hover {
     background: #388e3c;
 }
 
-.btn.reject {
-    background: #f44336;
-    color: white;
+.btn.approve:hover {
+    background: #2e7d32;
 }
 
-.btn.reject:hover {
+.btn.reject {
     background: #d32f2f;
 }
 
+.btn.reject:hover {
+    background: #b71c1c;
+}
+
 .btn.pending {
-    background: #ff9800;
-    color: white;
+    background: #ffa726;
 }
 
 .btn.pending:hover {
-    background: #ef6c00;
+    background: #fb8c00;
 }

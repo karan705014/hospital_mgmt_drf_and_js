@@ -1,0 +1,42 @@
+
+body {
+  background: linear-gradient(135deg, #1e1e2f, #2c2c3f, #3a3a5a);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e0e0e0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Admin form box */
+.form-box {
+  background: #2f2f44;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  width: 400px;
+  border: 1px solid #444466; 
+}
+
+/* Admin form labels */
+.form-label {
+  font-weight: 600;
+  color: #cfd8dc;
+}
+
+/* Buttons */
+button {
+  background-color: #4cafee; 
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #3a9bdc; 
+}

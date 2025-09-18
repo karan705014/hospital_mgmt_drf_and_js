@@ -16,5 +16,9 @@ urlpatterns = [
     path('adminpage/login',views.admin_login,name="admin_login"),
     path('adminpage/verify',views.admin_verify,name="admin_verify"),
     path("adminpage/update_status/<int:appointment_id>/<str:status>/", views.update_status, name="update_status"),
-
+    path("adminpage/home",views.admin_home,name="admin_home"),
+    path("admin/logout/", views.admin_logout, name="admin_logout"),
+    path('doctor/add/page',views.doctor_add_page,name="doctor_add_page"),
+    path("delete/doctor/<doctor_id>/",views.delete_doctor,name="delete_doctor"),
+    path('manage/octors',views.manage_doctors,name="manage_doctors")
 ]

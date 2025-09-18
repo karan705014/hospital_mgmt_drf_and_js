@@ -3,6 +3,9 @@ from rest_framework.decorators import api_view
 from .serializers import PatientSerializer
 from .models import Patient,Doctor,Appointment,Admin
 from django.utils import timezone
+from django.contrib import messages
+
+
 
 
 # Create your views here.
@@ -108,11 +111,6 @@ def status_page(request):
 
 
 
-def admin_dashboard(request):
-    appointments = Appointment.objects.all().order_by('-id') 
-    return render(request,"admin_dashboard.html",{"appointments":appointments})
-
-
 def admin_login(request):
     return render(request,"admin_login.html")
 
@@ -126,10 +124,34 @@ def admin_verify(request):
         try:
             admin=Admin.objects.get(phone=phone,password=password)
             request.session['admin_id']=admin.id
-            return redirect("admin_dashboard")
+            return redirect("admin_home")
         except Admin.DoesNotExist:
             error="invlid phone and password"
     return render(request,"admin_login.html",{"error":error})
+
+
+def admin_dashboard(request):
+   
+    if 'admin_id' not in request.session:
+        return redirect('admin_login')
+
+    appointments = Appointment.objects.all().order_by('-id')
+    return render(request, "admin_dashboard.html", {"appointments": appointments})
+
+
+
+def admin_home(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin_login')
+    return render(request, "admin_home.html")
+
+
+
+
+def admin_logout(request):
+    request.session.flush()   # puri session clear
+    return redirect("admin_login")
+
 
 
 def update_status(request, appointment_id, status):
@@ -137,3 +159,36 @@ def update_status(request, appointment_id, status):
     appt.status = status
     appt.save()
     return redirect('admin_dashboard')
+
+
+def doctor_add_page(request):
+    if 'admin_id' not in request.session:
+         return redirect('admin_login')
+    doctors=Doctor.objects.all().order_by('-id')
+    return render(request,"doctor_add_page.html",{"doctors":doctors})
+
+
+def delete_doctor(request,doctor_id):
+     if 'admin_id' not in request.session:
+         return redirect('admin_login')
+     doc=get_object_or_404(Doctor,id=doctor_id)
+     doc.delete()
+     return redirect('doctor_add_page')
+
+def manage_doctors(request):
+    if 'admin_id' not in request.session:
+        return redirect('admin_login')
+    
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        specialty = request.POST.get("specialty")
+
+        # Doctor object create karke save karna
+        Doctor.objects.create(
+            name=name,
+            specialty=specialty
+        )
+        return redirect('doctor_add_page') 
+    doctors= Doctor.objects.all()
+    return render(request,"doctor_add_page.html",{"doctors":doctors})
+    

@@ -6,75 +6,82 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(135deg, #e0f7fa, #ffffff, #b2ebf2);
+      background: linear-gradient(135deg, #004d40, #00695c, #004d40); /* Teal Dark Gradient */
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
     }
 
-    /* Floating hospital icons */
-    .icon {
-      position: absolute;
-      font-size: 28px;
-      color: rgba(0, 121, 107, 0.3);
-      animation: float 12s linear infinite;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(100vh) rotate(0deg);
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-10vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
+    /* Login box */
     .login-box {
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-      width: 350px;
-      position: relative;
-      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      width: 380px;
+      text-align: center;
+    }
+
+    .login-box h3 {
+      font-weight: 700;
+      color: #004d40;   /* Teal Dark Heading */
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 25px;
+      padding: 12px 20px;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-control:focus {
+      border-color: #004d40;
+      box-shadow: 0 0 8px rgba(0, 77, 64, 0.6);
     }
 
     .btn-login {
-      background-color: #00796b;
+      background-color: #004d40;  /* Teal Dark Button */
       color: #fff;
       font-weight: 600;
       border-radius: 25px;
+      padding: 10px 20px;
+      transition: all 0.3s ease;
+      width: 100%;
     }
     .btn-login:hover {
-      background-color: #004d40;
+      background-color: #002d27;  /* Darker hover */
+      transform: scale(1.05);
+    }
+
+    .footer-text {
+      font-size: 13px;
+      margin-top: 15px;
+      color: #333;
     }
   </style>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
 
-  <!-- Floating icons (Font Awesome hospital set) -->
-  <i class="fa-solid fa-stethoscope icon" style="left:10%; animation-delay:0s;"></i>
-  <i class="fa-solid fa-syringe icon" style="left:25%; animation-delay:2s;"></i>
-  <i class="fa-solid fa-heart-pulse icon" style="left:40%; animation-delay:4s;"></i>
-  <i class="fa-solid fa-pills icon" style="left:60%; animation-delay:6s;"></i>
-  <i class="fa-solid fa-kit-medical icon" style="left:80%; animation-delay:8s;"></i>
-  <i class="fa-solid fa-user-doctor icon" style="left:90%; animation-delay:10s;"></i>
-
+  <!-- Login Box -->
   <div class="login-box">
-    <h3 class="text-center mb-3"> ADMIN LOGIN</h3>
-   <form method="POST" action="{% url 'admin_verify' %}">
-    {% csrf_token %}
-    <input type="text" name="phone">
-    <input type="password" name="password">
-    <button type="submit">Login</button>
+    <h3>ADMIN LOGIN </h3>
+    <form method="POST" action="{% url 'admin_verify' %}">
+      {% csrf_token %}
+      <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
+      <input type="password" name="password" class="form-control" placeholder="Password" required>
+      <button type="submit" class="btn btn-login">Login</button>
+
+      {% if error %}
+        <p style="color: red; margin-top: 10px;">{{ error }}</p>
+      {% endif %}
+      
+      <div class="footer-text">
+        <small>Hospital Management System &copy; 2025</small>
+      </div>
     </form>
   </div>
 </body>
