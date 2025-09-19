@@ -15,7 +15,8 @@ class Patient(models.Model):
 class Doctor(models.Model):
     name=models.CharField(max_length=50)
     specialty=models.CharField(max_length=50)
-
+    phone = models.CharField(max_length=15)
+    password = models.CharField(max_length=128)
     def __str__(self):
         return self.name
     

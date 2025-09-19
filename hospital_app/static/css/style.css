@@ -205,96 +205,6 @@
 
 
 
-/* Common Floating Hospital Icons */
-
-.icon {
-  position: absolute;
-  font-size: 28px;
-  color: rgba(0, 121, 107, 0.3);
-  animation: float 12s linear infinite;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(100vh) rotate(0deg);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-10vh) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-
-/* LOGIN PAGE */
-
-body.login-page {
-  background: linear-gradient(135deg, #e0f7fa, #ffffff, #b2ebf2);
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-.login-box {
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-  width: 350px;
-  position: relative;
-  z-index: 10;
-}
-
-.btn-login {
-  background-color: #00796b;
-  color: #fff;
-  font-weight: 600;
-  border-radius: 25px;
-}
-
-.btn-login:hover {
-  background-color: #004d40;
-}
-
-/* REGISTER PAGE */
-
-body.register-page {
-  background: linear-gradient(135deg, #fff3e0, #ffe0b2, #fff8e1);
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-}
-
-.register-box {
-  background: #fff;
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  width: 380px;
-  position: relative;
-  z-index: 10;
-}
-
-.btn-register {
-  background-color: #00796b;
-  color: #fff;
-  font-weight: 600;
-  border-radius: 25px;
-  transition: 0.3s;
-}
-
-.btn-register:hover {
-  background-color: #004d40;
-  transform: scale(1.05);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
-}
 
 
 /* HOME PAGE */
@@ -303,4 +213,126 @@ body.home-page {
   background: linear-gradient(135deg, #e8f5e9, #c8e6c9, #a5d6a7);
   min-height: 100vh;
   padding: 20px;
+}
+
+
+
+
+
+
+/*  MOBILE RESPONSIVE FIXES  */
+@media (max-width: 768px) {
+
+    /* MAIN CONTENT */
+    .main-content {
+        padding: 15px 10px;
+    }
+
+    .main-content section {
+        padding: 20px;
+    }
+
+    .main-content h1, .main-content h2 {
+        font-size: 1.4rem;
+    }
+
+    .main-content p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .main-content .btn-primary {
+        padding: 8px 18px;
+        font-size: 0.9rem;
+    }
+
+    /* NAVBAR */
+    .navbar {
+        min-height: 70px;
+        padding: 0 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .navbar .nav-link {
+        font-size: 0.9rem;
+        margin: 5px 0;
+        text-align: center;
+    }
+
+    .navbar .btn-primary {
+        width: 90%;
+        margin-top: 10px;
+        padding: 6px 0;
+        font-size: 0.85rem;
+    }
+
+    /* CARDS */
+    .card, .hospital-card {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .card-img-small {
+        height: 140px;
+    }
+
+    .hospital-card .card-title {
+        font-size: 1rem;
+    }
+
+    .hospital-card .card-text {
+        font-size: 0.85rem;
+    }
+
+    /* FOOTER */
+    .footer {
+        padding: 20px 10px;
+        text-align: center;
+    }
+
+    .footer .footer-title {
+        font-size: 1rem;
+    }
+
+    .footer p, .footer li {
+        font-size: 0.85rem;
+    }
+
+    /* Floating Icons */
+    .icon {
+        font-size: 22px;
+    }
+
+    /* HOME PAGE */
+    body.home-page {
+        padding: 10px;
+    }
+}
+
+/*  EXTRA OFFICIAL LOOK FIXES  */
+@media (max-width: 480px) {
+    /* Navbar brand underline animation smoother */
+    .navbar-brand::after {
+        height: 2px;
+    }
+
+    /* Smaller buttons for very small screens */
+    .navbar .btn-primary,
+    .main-content .btn-primary {
+        padding: 6px 15px;
+        font-size: 0.8rem;
+    }
+
+    /* Section spacing */
+    .main-content section {
+        margin-bottom: 20px;
+    }
 }

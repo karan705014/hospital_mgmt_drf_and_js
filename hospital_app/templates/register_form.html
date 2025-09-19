@@ -72,9 +72,6 @@
 
   <div class="form-container animate__animated animate__fadeInDown">
     <h2> Patient Registration</h2>
-
-    {% comment %} yaha har input me name = jo bhi hai hona chea nahi to name=name yaa name = email
-    joo bhi model me diya ho data store karana ke liya yaha doga tabhi data access hoga {% endcomment %}
     <form method="post" action="{% url 'register_api' %}">
     {% csrf_token %}
 

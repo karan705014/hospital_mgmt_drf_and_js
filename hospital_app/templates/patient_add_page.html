@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Patients</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/patient_add_page.css' %}">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="logout-container">
+            <a href="{% url 'admin_logout' %}" class="btn logout-btn">Logout</a>
+        </div>
+
+        <h2 class="text-center mb-4">MANAGE - PATIENTS</h2>
+
+        <!-- Patient List -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">All Patients</div>
+            <div class="card-body">
+                {% if patients %}
+                <table class="table table-bordered table-striped text-center">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for patient in patients %}
+                        <tr>
+                            <td>{{ patient.id }}</td>
+                            <td>{{ patient.name }}</td>
+                            <td>{{ patient.phone }}</td>
+                            <td>{{ patient.email }}</td>
+                            <td>
+                                <a href="{% url 'delete_patient' patient.id %}" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p class="text-center">No patients found.</p>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <!-- Add Patient Form -->
+        <div class="card">
+            <div class="card-header bg-primary text-white">➕ Add New Patient</div>
+            <div class="card-body">
+                <form method="POST" action="{% url 'manage_patients' %}">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <!-- Patient Name -->
+                        <div class="col-md-6 mb-3">
+                            <input type="text" name="name" class="form-control" placeholder="Patient Name" required>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-md-6 mb-3">
+                            <input type="tel" name="phone" class="form-control" placeholder="Phone Number" required
+                                pattern="[0-9]{10}" title="Enter 10-digit phone number">
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6 mb-3">
+                            <input type="email" name="email" class="form-control" placeholder="Email" required>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="col-md-6 mb-3">
+                            <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        </div>
+
+                        <!-- Gender -->
+                        <div class="col-md-6 mb-3">
+                            <select name="gender" class="form-select" required>
+                                <option value="" disabled selected>Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Age -->
+                        <div class="col-md-6 mb-3">
+                            <input type="number" name="age" class="form-control" placeholder="Age" required min="0"
+                                max="120">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100">Add Patient</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+
+</html>
