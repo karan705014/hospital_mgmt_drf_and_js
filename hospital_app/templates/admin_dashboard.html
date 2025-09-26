@@ -27,36 +27,13 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
-                {% for appt in appointments %}
-                <tr>
-                    <td>{{ appt.patient.name }}</td>
-                    <td>{{ appt.doctor.name }}</td>
-                    <td>{{ appt.time }}</td>
-                    <td>{{ appt.date }}</td>
-                    <td>
-                        {% if appt.status == "pending" %}
-                            <span class="status pending">Pending</span>
-                        {% elif appt.status == "approved" %}
-                            <span class="status approved">Approved</span>
-                        {% else %}
-                            <span class="status rejected">Rejected</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'update_status' appt.id 'approved' %}" class="btn approve">Approve</a>
-                        <a href="{% url 'update_status' appt.id 'rejected' %}" class="btn reject">Reject</a>
-                        <a href="{% url 'update_status' appt.id 'pending' %}" class="btn pending">Pending</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="6" class="no-data">No appointments</td>
-                </tr>
-                {% endfor %}
+            <tbody id="appointmentsTable">
+                <!-- JS will populate rows here -->
             </tbody>
         </table>
+        <p id="noAppointments" class="no-data d-none">No appointments</p>
     </div>
 </body>
 </html>
 
+<script src="{% static 'js/admindashboard.js' %}"></script>

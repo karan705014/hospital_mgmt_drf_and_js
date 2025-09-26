@@ -11,8 +11,9 @@
 
 <body>
     <div class="container mt-5">
+        <!-- Logout -->
         <div class="logout-container">
-            <a href="{% url 'admin_logout' %}" class="btn logout-btn">Logout</a>
+            <a href="/admin/logout/" class="btn logout-btn">Logout</a>
         </div>
 
         <h2 class="text-center mb-4">MANAGE - PATIENTS</h2>
@@ -21,7 +22,6 @@
         <div class="card mb-4">
             <div class="card-header bg-success text-white">All Patients</div>
             <div class="card-body">
-                {% if patients %}
                 <table class="table table-bordered table-striped text-center">
                     <thead>
                         <tr>
@@ -32,33 +32,19 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for patient in patients %}
-                        <tr>
-                            <td>{{ patient.id }}</td>
-                            <td>{{ patient.name }}</td>
-                            <td>{{ patient.phone }}</td>
-                            <td>{{ patient.email }}</td>
-                            <td>
-                                <a href="{% url 'delete_patient' patient.id %}" class="btn btn-danger btn-sm">Delete</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                    <tbody id="patientTableBody">
+                        <!-- Patients rows will be inserted by JS -->
                     </tbody>
                 </table>
-                {% else %}
-                <p class="text-center">No patients found.</p>
-                {% endif %}
+                <p id="noPatientsMsg" class="text-center text-muted" style="display:none;">No patients found.</p>
             </div>
         </div>
-
 
         <!-- Add Patient Form -->
         <div class="card">
             <div class="card-header bg-primary text-white">➕ Add New Patient</div>
             <div class="card-body">
-                <form method="POST" action="{% url 'manage_patients' %}">
-                    {% csrf_token %}
+                <form id="patientForm">
                     <div class="row mb-3">
                         <!-- Patient Name -->
                         <div class="col-md-6 mb-3">
@@ -102,9 +88,8 @@
                 </form>
             </div>
         </div>
-
-
     </div>
+    
+  <script src="{% static 'js/patientaddpage.js' %}"></script>
 </body>
-
 </html>

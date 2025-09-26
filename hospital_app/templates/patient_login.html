@@ -12,7 +12,7 @@
 
   <div class="login-box">
     <h3>PATIENT LOGIN</h3>
-    <form method="POST" action="{% url 'patient_verify' %}">
+    <form id="loginForm" method="POST" action="{% url 'patient_verify_api' %}">
       {% csrf_token %}
       <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
       <input type="password" name="password" class="form-control" placeholder="Password" required>
@@ -27,6 +27,8 @@
       </div>
     </form>
   </div>
+  <script src="{% static 'js/loginverify.js' %}"></script>
+
 
 </body>
 </html>

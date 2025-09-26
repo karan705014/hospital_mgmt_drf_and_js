@@ -11,22 +11,18 @@
 
   <div class="login-box">
     <h3>LOGIN FOR STATUS CHECK</h3>
-      <form method="POST" action="{% url 'status_check' %}">
+    <form id="statusloginform">
       {% csrf_token %}
-      <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
-      <input type="password" name="password" class="form-control" placeholder="Password" required>
+      <input type="text" name="phone" id="phone" class="form-control" placeholder="Phone Number" required>
+      <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
       <button type="submit" class="btn btn-login">Login</button>
-
-      {% if error %}
-        <p style="color: red; margin-top: 10px;">{{ error }}</p>
-      {% endif %}
-
-      <div class="footer-text">
-        <small>Hospital Management System &copy; 2025</small>
-      </div>
     </form>
+    <div id="error" style="color:red; margin-top:10px;"></div>
+    <div class="footer-text">
+        <small>Hospital Management System &copy; 2025</small>
+    </div>
   </div>
 
+<script src="{% static 'js/statusverify.js' %}"></script>
 </body>
 </html>
-

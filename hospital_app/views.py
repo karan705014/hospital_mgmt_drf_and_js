@@ -1,14 +1,17 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from rest_framework.decorators import api_view 
-from .serializers import PatientSerializer
+from .serializers import PatientSerializer,AppointmentSerializer
 from .models import Patient,Doctor,Appointment,Admin
 from django.utils import timezone
 from .decorators import admin_required,doctor_required
-
-
-# from django.contrib import messages
-
-
+from rest_framework.response import Response
+from rest_framework import status 
+from rest_framework import viewsets
+from .models import Patient
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from rest_framework import status as drf_status
 
 
 # Create your views here.
@@ -21,11 +24,16 @@ def registration_detail(request):
 
 @api_view(['POST'])
 def registration_store(request):
-    serializer=PatientSerializer(data=request.data)
+    serializer = PatientSerializer(data=request.data)
     if serializer.is_valid():
-      serializer.save()
-      return render(request,"registration_done.html")
-    return redirect('register_api')
+        serializer.save()
+        return Response({"message": "Registration successful!"}, status=201)
+    return Response(serializer.errors, status=400)
+
+def register_done(request):
+    return render(request, "registration_done.html")
+
+
 
 
 
@@ -33,114 +41,146 @@ def patient_login(request):
     return render(request,"patient_login.html")
 
 
-# ye without rest hai for easy
-def patient_verify(request):
-    errror=None
-    if request.method=="POST":
-        phone=request.POST.get("phone")
-        password=request.POST.get("password")
-        try:
-            patient=Patient.objects.get(phone=phone,password=password)
-            request.session['patient_id'] = patient.id
-            return redirect("book_appointment")
-        except Patient.DoesNotExist:
-            errror="invalid username or password"
-    return render(request,"register_form.html",{"errror":errror})
-
-
-
-def book_appointment(request):
-    doctors = Doctor.objects.all()
-    
-    # Patient fetch from session
-    patient_id = request.session.get("patient_id")
-    patient = None
-    if patient_id:
-        try:
-            patient = Patient.objects.get(id=patient_id)
-        except Patient.DoesNotExist:
-            patient = None
-    
+@csrf_exempt
+def patient_verify_api(request):
     if request.method == "POST":
-        doctor_id = request.POST.get("doctor")
-        appointment_time = request.POST.get("time")
-        date=request.POST.get("date")
-        doctor = Doctor.objects.get(id=doctor_id)
+        import json
+        try:
+            data = json.loads(request.body.decode('utf-8'))  # <-- yee byte object ko normal python string me convert kar deta hai
+            phone = data.get("phone")
+            password = data.get("password")
+            patient = Patient.objects.get(phone=phone, password=password)
+            request.session['patient_id'] = patient.id
+            return JsonResponse({"success": True, "message": "Login successful!"})
+        except Patient.DoesNotExist:
+            return JsonResponse({"success": False, "message": "Invalid username or password."})
+        except Exception as e:
+            print("Error:", e)
+            return JsonResponse({"success": False, "message": "Internal server error."})
+    return JsonResponse({"success": False, "message": "Only POST allowed."})
 
-        if patient:  # only save if patient is logged in
-            Appointment.objects.create(
-                patient=patient,
-                doctor=doctor,
-                time=appointment_time,
-                date=date if date else timezone.now().date()
-            )
-            return redirect('appointment_success')
-        else:
-            message = "Patient not logged in!"
+def book_appointment_render(request):
+    return render(request,"book_appointment.html")
 
-        return render(request, "book_appointment.html", {"doctors": doctors, "message": message})
+@api_view(['POST','GET'])
+def book_appointment(request):
+   if request.method=='GET':
+       doctors = Doctor.objects.all().values('id','name','specialty')
+       return Response({"doctors":list(doctors)},status=status.HTTP_200_OK)
+   
+   if request.method=='POST':
+       patient_id=request.session.get("patient_id")
+       if not patient_id :
+           return Response({"success":False,"message":"invalid user"},status=status.HTTP_400_BAD_REQUEST)
+       try:
+           patient = Patient.objects.get(id=patient_id)
+       except Patient.DoesNotExist:
+           return Response({"success":False,"message":"invalid patient"},status=status.HTTP_404_NOT_FOUND)
+       
+       doctor_id =request.data.get("doctor")
+       appointment_time=request.data.get("time")
+       date =request.data.get("date") 
 
-    return render(request, "book_appointment.html", {"doctors": doctors})
+       try:
+           doctor=Doctor.objects.get(id=doctor_id)
+       except Doctor.DoesNotExist:
+           return Response({"success":False,"message":"invalid doctor id"},status=status.HTTP_400_BAD_REQUEST)
+       
+    #    appointment creation here 
+       Appointment.objects.create(
+           patient=patient,
+           doctor=doctor,
+           time=appointment_time,
+           date=date
+
+        )
+       return Response({"success":True,"message":"appointment booked successfull!"},status=status.HTTP_201_CREATED)
+
 
 
 
 def  appointment_success(request):
     return render(request,"appointment_sucess.html")
 
+
+
 def status_verify(request):
     return render(request,"status_verify.html")
 
+
+@api_view(['POST'])
 def status_check(request):
-    if request.method=="POST":
-        phone=request.POST.get("phone")
-        password=request.POST.get("password")
+    try:
+        # request.data automatically parses JSON
+        phone = request.data.get("phone")
+        password = request.data.get("password")
 
-        try:
-            patient=Patient.objects.get(phone=phone,password=password)
-            request.session['patient_id']=patient.id
-            return redirect("status_page")
-        except Patient.DoesNotExist:
-            error="ivalid user name or paassword"
-    return redirect('home')
+        patient = Patient.objects.get(phone=phone, password=password)
+        request.session['patient_id'] = patient.id
 
+        return Response({"success": True, "patient_id": patient.id}, status=status.HTTP_200_OK)
+
+    except Patient.DoesNotExist:
+        return Response({"success": False, "error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
+
+    except Exception as e:
+        print("Error:", e)
+        return Response({"success": False, "error": "Internal server error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+@api_view(['GET'])
 def status_page(request):
     if "patient_id" not in request.session:
-        return redirect("patient_login")  
+        return Response({"error":"patient unauthorized "},status=status.HTTP_401_UNAUTHORIZED)
 
     patient_id = request.session["patient_id"]
     appointments = Appointment.objects.filter(patient_id=patient_id).order_by("-id")
+    serializers =AppointmentSerializer(appointments,many=True)
+    return Response(serializers.data,status=status.HTTP_200_OK)
 
-    return render(request, "status_page.html", {"appointments": appointments})
+
+
+def status_dashboard(request):
+    return render(request,"status_page.html")
 
 
 
 def admin_login(request):
     return render(request,"admin_login.html")
 
-
+@api_view(['POST'])
 def admin_verify(request):
-    error=None
-    if request.method=='POST':
-        phone=request.POST.get("phone")
-        password=request.POST.get("password")
+    
+        phone=request.data.get("phone")
+        password=request.data.get("password")
 
         try:
             admin=Admin.objects.get(phone=phone,password=password)
             request.session['admin_id']=admin.id
-            # next_url = request.GET.get('next')
-            # if next_url:
-            #     return redirect(next_url)
-
-            return redirect("admin_home")
+            return Response({"success":True,"admin_id":admin.id},status=status.HTTP_200_OK)
         except Admin.DoesNotExist:
-            error="invlid phone and password"
-    return render(request,"admin_login.html",{"error":error})
+            return Response({"success":False,"error":"admin invalid "},status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print("error",e)
+            return Response({"success":False,"error":"internal error"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+            
 
 
-@admin_required 
-def admin_dashboard(request):
+# def admin_dashboard(request):
+#     appointments = Appointment.objects.all().order_by('-id')
+#     return render(request, "admin_dashboard.html", {"appointments": appointments})
+
+@api_view(['GET'])
+def admin_dashboard (request):
+    if 'admin_id' not in request.session:
+        return Response({"error" : "unauthorized admin"},status=status.HTTP_401_UNAUTHORIZED)
+    
     appointments = Appointment.objects.all().order_by('-id')
-    return render(request, "admin_dashboard.html", {"appointments": appointments})
+    serializers=AppointmentSerializer(appointments,many=True)
+    return Response(serializers.data,status=status.HTTP_200_OK)
+
 
 
 @admin_required
@@ -155,12 +195,21 @@ def admin_logout(request):
     return redirect("admin_login")
 
 
-@admin_required 
+@api_view(['POST'])
 def update_status(request, appointment_id, status):
     appt = get_object_or_404(Appointment, id=appointment_id)
     appt.status = status
     appt.save()
-    return redirect('admin_dashboard')
+    serializers=AppointmentSerializer(appt)
+    return Response({
+        "success": True,
+        "message": f"Appointment status updated to {status}",
+        "appointment": serializers.data
+    }, status=drf_status.HTTP_200_OK)
+
+
+def adminpage_show (request):
+    return render(request,"admin_dashboard.html")
 
 
 @admin_required 
@@ -196,40 +245,33 @@ def manage_doctors(request):
     return render(request,"doctor_add_page.html",{"doctors":doctors})
     
 
-@admin_required 
-def patient_add_page(request):
-        
-        patients=Patient.objects.all().order_by("-id")
-        return render(request,"patient_add_page.html",{"patients":patients})
+def admin_home_page(request):
+    return render("admin_home.html")
 
-@admin_required 
-def delete_patient(request,patient_id):
-      patient=get_object_or_404(Patient,id=patient_id)
-      patient.delete()
-      return redirect('patient_add_page')
+def patient_adminpage(request):
+    return render(request,"patient_add_page.html")
 
 
-@admin_required 
-def manage_patients(request):
-    if request.method=='POST':
-        name=request.POST.get("name")
-        phone=request.POST.get("phone")
-        email=request.POST.get("email")
-        password=request.POST.get("password")
-        gender=request.POST.get("gender")
-        age=request.POST.get("age")
+@api_view(['GET','POST'])
+def manage_patient_api(request):
+  if  request.method=='GET':
+      patients=Patient.objects.all()
+      serializer=PatientSerializer(patients,many=True)
+      return Response(serializer.data)
+  elif request.method=='POST':
+      serializer=PatientSerializer(data=request.data)
+      if serializer.is_valid():
+          serializer.save()
+          return Response(serializer.data,status=status.HTTP_201_CREATED)
+      return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+     
 
-        Patient.objects.create(
-            name=name,
-            phone=phone,
-            email=email,
-            password=password,
-            gender=gender,
-            age=age
-        )
-        return redirect('patient_add_page')
-    patients=Patient.objects.all()
-    return render(request,"patient_add_page.html",{"patients":patients})
+@api_view(['DELETE'])
+def delete_patient_api(request,pk):
+    patient=get_object_or_404(Patient,id=pk)
+    patient.delete()
+    return Response({"message":"patient delete successfully"},status=status.HTTP_204_NO_CONTENT)
+
 
 
 def doctor_login(request):

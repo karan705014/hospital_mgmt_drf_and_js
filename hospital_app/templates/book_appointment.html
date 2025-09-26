@@ -7,23 +7,23 @@
   <p style="color:green;">{{ message }}</p>
 {% endif %}
 
-<form method="POST">
+<form method="POST" id="appointmentForm">
     {% csrf_token %}
 
     <label for="doctor">Doctor Name:</label>
-    <select name="doctor" required>
-        {% for doctor in doctors %}
-            <option value="{{ doctor.id }}">{{ doctor.name }} ({{ doctor.specialty }})</option>
-        {% empty %}
-            <option disabled>No doctors found</option>
-        {% endfor %}
+    <!-- Empty select; JS will populate options -->
+    <select id="doctorSelect" name="doctor" required>
+        <option disabled selected>Loading doctors...</option>
     </select>
     <br><br>
 
     <label for="time">Appointment Time:</label>
     <input type="time" name="time" required><br><br>
+
     <label for="date">Date:</label>
     <input type="date" name="date" required><br><br>
 
     <button type="submit">Book Appointment</button>
 </form>
+
+<script src="{% static 'js/bookappointment.js' %}"></script>
