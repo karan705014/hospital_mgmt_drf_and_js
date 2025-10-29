@@ -46,7 +46,7 @@ def patient_verify_api(request):
     if request.method == "POST":
         import json
         try:
-            data = json.loads(request.body.decode('utf-8'))  # <-- yee byte object ko normal python string me convert kar deta hai
+            data = json.loads(request.body.decode('utf-8'))  
             phone = data.get("phone")
             password = data.get("password")
             patient = Patient.objects.get(phone=phone, password=password)
